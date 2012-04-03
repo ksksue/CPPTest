@@ -1,0 +1,41 @@
+inlineをcppで宣言するとエラーとなる？
+インライン展開せずにオブジェクトファイル生成してしまうため？
+
+以下ビルド実行時ログ
+
+**** Build of configuration Debug for project inlineError ****
+
+make all 
+Building file: ../src/main.cpp
+Invoking: GCC C++ Compiler
+g++ -I"/home/keisuke/Debian/Workspace/Github/CPPTest/inlineError/src" -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/main.d" -MT"src/main.d" -o "src/main.o" "../src/main.cpp"
+../src/main.cpp: In function ‘int addOne(int)’:
+../src/main.cpp:32:15: warning: deprecated conversion from string constant to ‘char*’
+../src/main.cpp: In function ‘int main()’:
+../src/main.cpp:43:7: warning: unused variable ‘y’
+../src/trace.h: At global scope:
+../src/trace.h:18:9: warning: inline function ‘Trace::Trace(const char*)’ used but never defined
+../src/trace.h:20:9: warning: inline function ‘Trace::~Trace()’ used but never defined
+Finished building: ../src/main.cpp
+ 
+Building file: ../src/prof.cpp
+Invoking: GCC C++ Compiler
+g++ -I"/home/keisuke/Debian/Workspace/Github/CPPTest/inlineError/src" -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/prof.d" -MT"src/prof.d" -o "src/prof.o" "../src/prof.cpp"
+Finished building: ../src/prof.cpp
+ 
+Building file: ../src/trace.cpp
+Invoking: GCC C++ Compiler
+g++ -I"/home/keisuke/Debian/Workspace/Github/CPPTest/inlineError/src" -O0 -g3 -Wall -c -fmessage-length=0 -MMD -MP -MF"src/trace.d" -MT"src/trace.d" -o "src/trace.o" "../src/trace.cpp"
+../src/trace.cpp:76:16: warning: extra tokens at end of #ifdef directive
+Finished building: ../src/trace.cpp
+ 
+Building target: inlineError
+Invoking: GCC C++ Linker
+g++  -o "inlineError"  ./src/main.o ./src/prof.o ./src/trace.o   
+./src/main.o: In function `addOne(int)':
+/home/keisuke/Debian/Workspace/Github/CPPTest/inlineError/Debug/../src/main.cpp:33: undefined reference to `Trace::Trace(char const*)'
+/home/keisuke/Debian/Workspace/Github/CPPTest/inlineError/Debug/../src/main.cpp:33: undefined reference to `Trace::~Trace()'
+collect2: ld returned 1 exit status
+make: *** [inlineError] エラー 1
+
+**** Build Finished ****
